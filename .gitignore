@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .pnpm-store/
+src/assets/list of xyz files.xyz
 
 # Editor directories and files
 .vscode/*
