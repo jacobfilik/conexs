@@ -18,9 +18,9 @@ function Molecule3D(props: Molecule3DProps) {
                     existingViewers[index].remove()
                 }
             }
+            
             const viewer = $3Dmol.createViewer( document.querySelector('#container-01') );
             const v = viewer
-            v.clear()
             v.addModel(props.moleculedata, "xyz")
             v.setStyle({}, {stick: {color: 'spectrum'}});
             v.setBackgroundColor(props.color)
