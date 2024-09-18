@@ -1,6 +1,7 @@
 type Molecule3DProps = {
     color: string,
-    moleculedata: string
+    moleculedata: string,
+    style: string
 }
 
 function Molecule3D(props: Molecule3DProps) {
@@ -31,7 +32,11 @@ function Molecule3D(props: Molecule3DProps) {
                         const m = v.addModel(props.moleculedata, 'xyz');
                         
                         v.addUnitCell(m, { box: { color: 'purple' }, alabel: 'X', blabel: 'Y', clabel: 'Z' });
-                        v.setStyle({}, { stick: { color: 'spectrum' } });
+                        if (props.style == "Stick"){
+                            v.setStyle({}, { stick: { color: 'spectrum' } });
+                        } else if (props.style == "Sphere"){
+                            v.setStyle({}, { sphere: { color: 'spectrum', radius: 1 }})
+                        }
                         v.setBackgroundColor(props.color);
                         v.zoomTo();
                         v.render();
@@ -52,7 +57,7 @@ function Molecule3D(props: Molecule3DProps) {
         }
         window.addEventListener('beforeunload', cleanup);
       
-    return (<div id="container-01" className="mol-container" style={{height: "800px", width: "800px", position: 'relative', margin: 'auto'}} />)
+    return (<div id="container-01" style={{height: "100%", width: "100%", position: 'relative'}} />)
 }
 
 export default Molecule3D;
