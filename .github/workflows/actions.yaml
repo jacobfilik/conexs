@@ -35,42 +35,10 @@ jobs:
           name: production-files
           path: ./dist
 
-  data:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          sparse-checkout: |
-            scripts/build_database.py
-          sparse-checkout-cone-mode: false
-      - uses: actions/checkout@v3
-        with:
-          sparse-checkout: |
-            Data
-          repository: jacobfilik/bmm-standards
-          path: xdidata
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.10"
-      - name: Install dependencies
-        run: |
-          pip install xraylarch
-      - name: list
-        run: |
-          ls
-      # - name: Build db
-      #   run: |
-      #     python scripts/build_database.py
-      - name: Uploading data
-        uses: actions/upload-artifact@v4
-        with:
-          name: data-files
-          path: ./xdidata/Data
-
+  
   deploy:
     name: Deploy
-    needs: [build, data]
+    needs: [build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
@@ -80,11 +48,6 @@ jobs:
         with:
           name: production-files
           path: ./dist
-      - name: Downloading data
-        uses: actions/download-artifact@v4
-        with:
-          name: data-files
-          path: ./dist/xdidata
       - name: Deploying to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
