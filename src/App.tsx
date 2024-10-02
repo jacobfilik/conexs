@@ -9,7 +9,7 @@ function App() {
 
   const [color, setcolor] = useState("#3465A4")
   const [style, setStyle] = useState("Stick");
-  const [moleculedata, setmoleculeData] = useState('')
+  const [moleculedata, setmoleculeData] = useState('12\nBenzene molecule\nC   0.000000  1.402720  0.000000\nH   0.000000  2.490290  0.000000\nC  -1.214790  0.701360  0.000000\nH  -2.156660  1.245150  0.000000\nC  -1.214790 -0.701360  0.000000\nH  -2.156660 -1.245150  0.000000\nC   0.000000 -1.402720  0.000000\nH   0.000000 -2.490290  0.000000\nC   1.214790 -0.701360  0.000000\nH   2.156660 -1.245150  0.000000\nC   1.214790  0.701360  0.000000\nH   2.156660  1.245150  0.000000')
 
   return (
     <>
