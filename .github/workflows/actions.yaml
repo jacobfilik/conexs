@@ -1,124 +1,52 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Node.js CI
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ['main']
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v3
         with:
-          node-version: 20
-          cache: 'pnpm'
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
-      - name: Build
+      - name: Run build
         run: pnpm run build --base=/Conexs/
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Uploading production-ready build files
+        uses: actions/upload-artifact@v4
         with:
-          # Upload dist folder
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-# name: Node.js CI
-
-# on:
-#   push:
-#     branches: ["main"]
-#   pull_request:
-#     branches: ["main"]
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         node-version: [18]
-#     steps:
-#       - uses: actions/checkout@v3
-#       - uses: pnpm/action-setup@v3
-#         with:
-#           version: 8
-#       - name: Use Node.js ${{ matrix.node-version }}
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: ${{ matrix.node-version }}
-#           cache: "pnpm"
-#       - name: Install dependencies
-#         run: pnpm install
-#       - name: Run build
-#         run: pnpm run build --base=/Conexs/
-#       - name: Uploading production-ready build files
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: production-files
-#           path: ./dist
+          name: production-files
+          path: ./dist
 
   
-#   deploy:
-#     name: Deploy
-#     needs: [build]
-#     runs-on: ubuntu-latest
-#     if: github.ref == 'refs/heads/main'
+  deploy:
+    name: Deploy
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
-#     steps:
-#       - name: Downloading artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: production-files
-#           path: ./dist
-#       - name: Deploying to gh-pages
-#         uses: peaceiris/actions-gh-pages@v3
-#         with:
-#           github_token: ${{ secrets.GITHUB_TOKEN }}
-#           publish_dir: ./dist
+    steps:
+      - name: Downloading artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: production-files
+          path: ./dist
+      - name: Deploying to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
