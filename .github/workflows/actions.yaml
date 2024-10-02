@@ -59,9 +59,9 @@ jobs:
       - name: list
         run: |
           ls
-      - name: Build db
-        run: |
-          python scripts/build_database.py
+      # - name: Build db
+      #   run: |
+      #     python scripts/build_database.py
       - name: Uploading data
         uses: actions/upload-artifact@v4
         with:
