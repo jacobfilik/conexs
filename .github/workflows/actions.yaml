@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run build
-        run: pnpm run build --base=/Conexs/
+        run: pnpm run build --base=/
       - name: Uploading production-ready build files
         uses: actions/upload-artifact@v4
         with:
