@@ -27,6 +27,7 @@ function Molecule3D(props: Molecule3DProps) {
                     isRendering = true;
 
                     renderRequestId = window.requestAnimationFrame(() => {
+                        // @ts-expect-error $3dmol gives typescript error, not sure how to fix.
                         const viewer = $3Dmol.createViewer(document.querySelector('#container-01'));
                         const v = viewer;
                         const m = v.addModel(props.moleculedata, 'xyz');

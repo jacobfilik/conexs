@@ -1,6 +1,6 @@
 import { Alert, Button, TextField } from "@mui/material";
 import { useState } from "react";
-import React from "react";
+// import React from "react";
 
 type Molecule3DProps = {
     moleculedata: string,
