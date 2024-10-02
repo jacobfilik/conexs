@@ -1,5 +1,6 @@
 import { Alert, Button, TextField } from "@mui/material";
 import { useState } from "react";
+import React from "react";
 
 type Molecule3DProps = {
     moleculedata: string,
@@ -7,33 +8,45 @@ type Molecule3DProps = {
 }
 
 function MoleculeDataTextArea(props: Molecule3DProps) {
-    const [atoms, setAtoms] = useState(0)
-    const [comment, setComment] = useState("")
-    const [data, setData] = useState("")
-    const [error, setError] = useState([""])
-    const [isError, setIsError] = useState(false)
+    const initialSetup = props.moleculedata.split("\n")
     
-    function renderMolecule() {
+    const [atoms, setAtoms] = useState<number>(Number(initialSetup[0]))
+    const [comment, setComment] = useState<string>(initialSetup[1])
+    const [data, setData] = useState<string>(initialSetup.slice(2,).join("\n"))
+    const [error, setError] = useState<string[]>([""])
+    const [isError, setIsError] = useState<boolean>(false)
+    
+    function validateMoleculeData(data:string):string {
         const a = data.split("\n")
         let errorList = ""
+
         for (let index = 0; index < a.length; index++) {
             const b = a[index].split(/\b\s+/)
             if (b.length!=4) {
                 errorList = errorList + "Wrong number of items on line " + (index + 1) + "\n"
+                setIsError(true)
             }
             if (!/^[a-zA-Z]+$/.test(b[0])) {
                 errorList = errorList + "Invalid chemical on line " + (index + 1) + "\n"
+                setIsError(true)
             }
-            if (!/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[1]) || !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[2]) || !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[3])) {
+            if (!/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[1]) ||
+                !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[2]) ||
+                !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[3])) {
                 errorList = errorList + "Invalid number on line " + (index + 1) + "\n"
                 setIsError(true)
             }
         }
-        if (errorList == "") {
+        return errorList;
+    }
+
+    function renderMolecule() {
+        const errors = validateMoleculeData(data)
+        if (errors == "") {
             setIsError(false)
             props.setmoleculeData(atoms + "\n" + comment + "\n" + data)
         } else {
-            const temp = errorList.split("\n");
+            const temp = errors.split("\n");
             temp.length = temp.length -1
             setError(temp)}
     }
@@ -50,6 +63,7 @@ function MoleculeDataTextArea(props: Molecule3DProps) {
         <TextField
             id="Comment/Lattice"
             label="Comment/Lattice"
+            value={comment}
             sx={{m: 2, width: "calc(100% - 128px)"}}
             onChange={(e) => setComment(e.target.value)}
         />
@@ -58,6 +72,7 @@ function MoleculeDataTextArea(props: Molecule3DProps) {
             label="Molecule Data"
             multiline
             rows={20}
+            value={data}
             sx={{m: 2, width: "100%"}}
             onChange={(e) => {
                 setAtoms(e.target.value.split("\n").length)
@@ -74,7 +89,7 @@ function MoleculeDataTextArea(props: Molecule3DProps) {
             sx={{m: 2, width: "100%"}}
             severity="error">
                 <ul style={{padding: 0}}>
-                    {error.map(data => {return <li style={{listStyle: "none"}}>{data}</li>})}
+                    {error.map((data, index) => {return <li key={index} style={{listStyle: "none"}}>{data}</li>})}
                 </ul>
         </Alert> : <></>}
       </>

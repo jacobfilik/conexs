@@ -11,7 +11,7 @@ type styleProps = {
 
 export default function StyleToggle(props: styleProps) {
 
-  const handleStyle = (event: React.MouseEvent<HTMLElement>, newStyle: string) => {
+  const handleStyle = (_event: React.MouseEvent<HTMLElement>, newStyle: string) => {
     if (newStyle !== null) {
       props.setStyle(newStyle);
     }
