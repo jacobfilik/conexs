@@ -58,4 +58,15 @@ describe("initialMoleculeDataTextArea", () => {
         expect(atomCount).toContainHTML("3")
 
     })
+
+    it('should ignore and not display errors when there are empty new lines or spaces on the end of lines', () => {
+        const data = "3\nCarbon Dioxide molecule\n\nC   0.000000  0.000000  0.000000  \n\nO   1.160000  0.000000  0.000000    \nO  -1.160000  0.000000  0.000000  \n\n";
+        render(<MoleculeDataTextArea moleculedata={data} setmoleculeData={() => {}} />)
+
+        const renderButton = screen.getByRole('button', {name: /render/i});
+        fireEvent.click(renderButton);
+        const a = screen.queryByRole('alert')
+        expect(a).not.toBeInTheDocument()
+        
+    })
 });

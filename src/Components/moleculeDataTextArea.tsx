@@ -1,6 +1,6 @@
 import { Alert, Button, TextField } from "@mui/material";
 import { useState } from "react";
-// import React from "react";
+import React from "react";
 
 type Molecule3DProps = {
     moleculedata: string,
@@ -21,18 +21,19 @@ function MoleculeDataTextArea(props: Molecule3DProps) {
         let errorList = ""
 
         for (let index = 0; index < a.length; index++) {
-            const b = a[index].split(/\b\s+/)
-            if (b.length!=4) {
+            const currentLine = a[index].split(/\b\s+/).filter(i => i)
+            if (currentLine.length==0) { continue }
+            if (currentLine.length!=4) {
                 errorList = errorList + "Wrong number of items on line " + (index + 1) + "\n"
                 setIsError(true)
             }
-            if (!/^[a-zA-Z]+$/.test(b[0])) {
+            if (!/^[a-zA-Z]+$/.test(currentLine[0])) {
                 errorList = errorList + "Invalid chemical on line " + (index + 1) + "\n"
                 setIsError(true)
             }
-            if (!/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[1]) ||
-                !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[2]) ||
-                !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(b[3])) {
+            if (!/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(currentLine[1]) ||
+                !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(currentLine[2]) ||
+                !/^[+-]?[0-9]{1,}(?:\.[0-9]{1,})?$/.test(currentLine[3])) {
                 errorList = errorList + "Invalid number on line " + (index + 1) + "\n"
                 setIsError(true)
             }
@@ -44,7 +45,7 @@ function MoleculeDataTextArea(props: Molecule3DProps) {
         const errors = validateMoleculeData(data)
         if (errors == "") {
             setIsError(false)
-            props.setmoleculeData(atoms + "\n" + comment + "\n" + data)
+            props.setmoleculeData(atoms + "\n" + comment + "\n" + data.split("\n").filter(i => i).join("\n"))
         } else {
             const temp = errors.split("\n");
             temp.length = temp.length -1
@@ -75,7 +76,7 @@ function MoleculeDataTextArea(props: Molecule3DProps) {
             value={data}
             sx={{m: 2, width: "100%"}}
             onChange={(e) => {
-                setAtoms(e.target.value.split("\n").length)
+                setAtoms(e.target.value.split("\n").filter(i => i).length)
                 setData(e.target.value)
             }}
         />
