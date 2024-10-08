@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react";
+import * as mol3d from '3dmol';
+
 type Molecule3DProps = {
     color: string,
     moleculedata: string,
@@ -5,60 +8,31 @@ type Molecule3DProps = {
 }
 
 function Molecule3D(props: Molecule3DProps) {
-        const script = document.createElement('script');
-        let isRendering = false;
-        let renderRequestId: number | null = null;
+    const moleculeViewer = useRef<HTMLDivElement>(null)
 
-        script.src = "https://3Dmol.org/build/3Dmol.js";
-        script.async = true
-        script.className = "3dmolscript"
-        script.onload = () => {
-            const existingViewers = document.querySelectorAll("#undefined")
-            
+    useEffect(() => {
+        if (moleculeViewer.current) {
+            const existingViewers = moleculeViewer.current.children
             if (existingViewers.length!=0) {
                 for (let index = 0; index < existingViewers.length; index++) {
                     existingViewers[index].remove()
                 }
             }
-
-
-            function renderViewer() {
-                if (!isRendering) {
-                    isRendering = true;
-
-                    renderRequestId = window.requestAnimationFrame(() => {
-                        // @ts-expect-error $3dmol gives typescript error, not sure how to fix.
-                        const viewer = $3Dmol.createViewer(document.querySelector('#container-01'));
-                        const v = viewer;
-                        const m = v.addModel(props.moleculedata, 'xyz');
-                        
-                        v.addUnitCell(m, { box: { color: 'purple' }, alabel: 'X', blabel: 'Y', clabel: 'Z' });
-                        if (props.style == "Stick"){
-                            v.setStyle({}, { stick: { color: 'spectrum' } });
-                        } else if (props.style == "Sphere"){
-                            v.setStyle({}, { sphere: { color: 'spectrum', radius: 1 }})
-                        }
-                        v.setBackgroundColor(props.color);
-                        v.zoomTo();
-                        v.render();
-    
-                        isRendering = false;
-                    });
-                }
-            }
-            renderViewer();
         }
 
-        document.head.appendChild(script);
-
-        function cleanup() {
-            if (renderRequestId !== null) {
-                window.cancelAnimationFrame(renderRequestId);
-            }
+        const viewer = mol3d.createViewer(moleculeViewer.current, { backgroundColor: props.color });
+        const model = viewer.addModel(props.moleculedata, 'xyz');
+        if (props.style == "Stick"){
+            viewer.setStyle({}, { stick: { color: 'spectrum' } });
+        } else if (props.style == "Sphere"){
+            viewer.setStyle({}, { sphere: { color: 'spectrum', radius: 1 }})
         }
-        window.addEventListener('beforeunload', cleanup);
+        viewer.addUnitCell(model, { box: { color: 'purple' }, alabel: 'X', blabel: 'Y', clabel: 'Z' });
+        viewer.zoomTo();
+        viewer.render();
+    })
       
-    return (<div id="container-01" style={{height: "100%", width: "100%", position: 'relative'}} />)
+    return (<div ref={moleculeViewer} style={{height: "100%", width: "100%", position: 'relative'}} />)
 }
 
 export default Molecule3D;
