@@ -1,18 +1,14 @@
 import SideDrawer from "./Components/SideDrawer";
 import '@h5web/lib/styles.css'
-import { LineVis, getDomain } from '@h5web/lib';
+import { Domain, LineVis, getDomain } from '@h5web/lib';
 import ndarray from 'ndarray';
 import { useState } from "react";
+import { Box, Typography } from "@mui/material";
 
 export default function GraphPage() {
-    // const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    // const yEqual2X = x.map(x => 2 * x); // Line for y = 2x
-    // const yArray = ndarray(yEqual2X)
-    // const xydomain = getDomain(yArray);
-
     const [xValues, setXValues] = useState<number[]>([]);
-    const [domain, setDomain] = useState(null);
-    const [dataArray, setDataArray] = useState(null);
+    const [domain, setDomain] = useState<Domain>();
+    const [dataArray, setDataArray] = useState<ndarray.NdArray<number[]>>();
 
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files) return;
@@ -50,21 +46,21 @@ export default function GraphPage() {
   return (
     <>
         <SideDrawer />
-        {/* <LineVis dataArray={yArray} domain={xydomain} title="y=2x" showGrid /> */}
-        <h1>Graph Page - ORCA Data</h1>
-        <h2>Upload `.stk` or `.dat` file to visualize</h2>
-        <input type="file" onChange={handleFileUpload} />
-
-        {dataArray && domain ? (
-            <LineVis
-            dataArray={dataArray}                   // Y-axis values from the uploaded file
-            domain={domain}                         // Calculated domain
-            abscissaParams={{ value: xValues }}     // X-axis values
-            showGrid                                // Display grid lines
-            />
-        ) : (
-            <p>Please upload a valid `.stk` or `.dat` file to view the graph.</p>
-        )}
+        <Typography variant='h1' sx={{textAlign: "center"}}>Graph Page</Typography>
+        <Typography variant='h4' sx={{textAlign: "center"}}>Upload `.stk` or `.dat` file to visualize</Typography>
+        <Box sx={{textAlign: "center"}}>
+            <input type="file" onChange={handleFileUpload} />
+            {dataArray && domain ? (
+                <LineVis
+                dataArray={dataArray}                   // Y-axis values from the uploaded file
+                domain={domain}                         // Calculated domain
+                abscissaParams={{ value: xValues }}     // X-axis values
+                showGrid                                // Display grid lines
+                />
+            ) : (
+                <p>Please upload a valid `.stk` or `.dat` file to view the graph.</p>
+            )}
+        </Box>
     </>
   );
 }
