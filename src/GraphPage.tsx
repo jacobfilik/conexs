@@ -1,23 +1,41 @@
 import SideDrawer from "./Components/SideDrawer";
 import '@h5web/lib/styles.css'
-import { Domain, LineVis, getDomain } from '@h5web/lib';
-import ndarray from 'ndarray';
+import { Domain, getDomain, VisCanvas, DataCurve, DefaultInteractions } from '@h5web/lib';
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 
 export default function GraphPage() {
+    const [xdomain, setxDomain] = useState<Domain>();
+    const [ydomain, setyDomain] = useState<Domain>();
     const [xValues, setXValues] = useState<number[]>([]);
-    const [domain, setDomain] = useState<Domain>();
-    const [dataArray, setDataArray] = useState<ndarray.NdArray<number[]>>();
+    const [yValues, setYValues] = useState<number[]>([]);
+    const [xValues2, setXValues2] = useState<number[]>([]);
+    const [yValues2, setYValues2] = useState<number[]>([]);
 
-    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    function stkFilePreprocessing(content: string) {
+        const lines = content.split("\n");
+        let newContent = "";
+        for (let index = 0; index < lines.length; index++) {
+            const currentLine = lines[index];
+            const splitLine = currentLine.split(" ").filter((x) => x!="");
+            newContent = newContent + [splitLine[0], "0.00000000", "\n", splitLine[0], splitLine[1], "\n", splitLine[0], "0.00000000", "\n"].join(" ");
+        }
+        
+        return newContent;
+    }
+
+    const handleFileUpload1 = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files) return;
         const file = event.target.files[0];
     
         if (file) {
             const reader = new FileReader();
             reader.onload = function () {
-                const content = reader.result as string;
+                let content = reader.result as string;
+                if (file.type == "application/hyperstudio") {
+                    content = stkFilePreprocessing(content)
+                }
+                
                 const lines = content.split('\n');
                 const xVals: number[] = [];
                 const yVals: number[] = [];
@@ -29,16 +47,51 @@ export default function GraphPage() {
                         yVals.push(parseFloat(y)); // Parse y values
                     }
                 });
-    
+            
             setXValues(xVals);
-            const yArray = ndarray(yVals);
-            setDataArray(yArray);
-            const calculatedDomain = getDomain(yArray);
-            setDomain(calculatedDomain);
+            setYValues(yVals)
+            setxDomain(getDomain(xVals));
+            setyDomain(getDomain(yVals));
           };
     
           reader.readAsText(file); // Read the file as text
         }
+      };
+
+      const handleFileUpload2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files) return;
+        
+        const file = event.target.files[0];
+    
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                let content = reader.result as string;
+                if (file.type == "application/hyperstudio") {
+                    content = stkFilePreprocessing(content)
+                }
+                
+                const lines = content.split('\n');
+                const xVals: number[] = [];
+                const yVals: number[] = [];
+    
+                lines.forEach((line) => {
+                    const [x, y] = line.trim().split(/\s+/); // Split by space or tabs
+                    if (x && y) {
+                        xVals.push(parseFloat(x)); // Parse x values
+                        yVals.push(parseFloat(y)); // Parse y values
+                    }
+                });
+            
+            setXValues2(xVals);
+            setYValues2(yVals);
+            setxDomain(getDomain(xVals));
+            setyDomain(getDomain(yVals));
+          };
+    
+          reader.readAsText(file); // Read the file as text
+        };
+        
       };
     
     
@@ -49,17 +102,36 @@ export default function GraphPage() {
         <Typography variant='h1' sx={{textAlign: "center"}}>Graph Page</Typography>
         <Typography variant='h4' sx={{textAlign: "center"}}>Upload `.stk` or `.dat` file to visualize</Typography>
         <Box sx={{textAlign: "center"}}>
-            <input type="file" onChange={handleFileUpload} />
-            {dataArray && domain ? (
-                <LineVis
-                dataArray={dataArray}                   // Y-axis values from the uploaded file
-                domain={domain}                         // Calculated domain
-                abscissaParams={{ value: xValues }}     // X-axis values
-                showGrid                                // Display grid lines
-                />
-            ) : (
-                <p>Please upload a valid `.stk` or `.dat` file to view the graph.</p>
-            )}
+            <input type="file" onChange={handleFileUpload1} />
+            <input type="file" onChange={handleFileUpload2} />
+
+            {ydomain && xdomain ? ( // Abscissa refers to x axis and ordinate refers to the y axis
+                <VisCanvas
+                    abscissaConfig={{
+                    showGrid: true,
+                    visDomain: [xdomain[0], xdomain[1]]
+                    }}
+                    ordinateConfig={{
+                    showGrid: true,
+                    visDomain: [ydomain[0], ydomain[1]]
+                    }}
+                >
+                    <DefaultInteractions />
+                    <DataCurve
+                        abscissas={xValues}
+                        color="green"
+                        ordinates={yValues}
+                        visible
+                    />
+                    <DataCurve
+                        abscissas={xValues2}
+                        color="orange"
+                        ordinates={yValues2}
+                        visible
+                    />
+                </VisCanvas>
+            ) : <p>Please upload a valid '.dat' file in the first and a '.stk' file in the second.</p>}
+
         </Box>
     </>
   );
