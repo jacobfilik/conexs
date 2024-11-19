@@ -1,5 +1,5 @@
 import { Alert, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Molecule3DProps = {
     moleculedata: string,
@@ -39,6 +39,13 @@ function MoleculeDataTextArea(props: Molecule3DProps) {
         }
         return errorList;
     }
+
+    useEffect(() => {
+        const setup = props.moleculedata.split("\n")
+        setAtoms(Number(setup[0]))
+        setComment(setup[1])
+        setData(setup.slice(2,).join("\n"))
+    }, [props.moleculedata])
 
     function renderMolecule() {
         const errors = validateMoleculeData(data)
