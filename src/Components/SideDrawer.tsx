@@ -3,6 +3,7 @@ import { useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Link } from "react-router-dom";
 
 export default function SideDrawer() {
@@ -28,6 +29,14 @@ export default function SideDrawer() {
                     </ListItemButton>
                 </Link>
               </ListItem>
+              <ListItem key="Form Viewer" disablePadding>
+                <Link to={"/Conexs/form"} style={{textDecoration: "none", color: "black"}}>
+                    <ListItemButton>
+                        <ListItemIcon><EditNoteIcon /></ListItemIcon>
+                        <ListItemText primary="Form Viewer" />
+                    </ListItemButton>
+                </Link>
+              </ListItem>
           </List>
         </Box>
       );
@@ -36,7 +45,6 @@ export default function SideDrawer() {
         <Button onClick={toggleDrawer(true)}><MenuIcon fontSize="large" /></Button>
         <Drawer open={open} onClose={toggleDrawer(false)}>
             {DrawerList}
-            {/* <Link to="/Conexs/graph">Graph</Link> */}
         </Drawer>
     </>
 }
