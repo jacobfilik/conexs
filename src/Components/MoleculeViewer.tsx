@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import Molecule3D from './Molecule3D'
 import MoleculeDataTextArea from './moleculeDataTextArea'
-import { Box, Button, Grid2, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Divider, Grid2, Tooltip, Typography } from '@mui/material'
 import StyleToggle from './StyleToggle'
 import SideDrawer from './SideDrawer'
+import FormPage from '../FormPage'
 
 function MoleculeViewer() {
 
@@ -13,10 +14,10 @@ function MoleculeViewer() {
   const moleculeTemplateList: string[] = ["Glucose", "Carbon Dioxide", "Water", "Benzene", "Chloroethane", "Pyridine", "Lattice Example", "1aof_DHE_B_1"]
 
   const templateMolecule = (event: React.MouseEvent<HTMLInputElement>) => {
-  const element = event.currentTarget as HTMLInputElement;
-  const value = element.value;
+    const element = event.currentTarget as HTMLInputElement;
+    const value = element.value;
 
-  switch (value) {
+    switch (value) {
     case "Glucose":
       setmoleculeData('12\nglucose from 2gbp\nC  35.884  30.895  49.120\nC  36.177  29.853  50.124\nC  37.296  30.296  51.074\nC  38.553  30.400  50.259\nC  38.357  31.290  49.044\nC  39.559  31.209  48.082\nO  34.968  30.340  48.234\nN  34.923  29.775  50.910\nO  37.441  29.265  52.113\nO  39.572  30.954  51.086\nN  37.155  30.858  48.364\nO  39.261  32.018  46.920')
       break;
@@ -43,7 +44,7 @@ function MoleculeViewer() {
       break;
     default:
       break;
-  }
+    }
         
   }
 
@@ -51,8 +52,8 @@ function MoleculeViewer() {
     <>
       <SideDrawer />
       <Typography variant='h1' sx={{textAlign: "center"}}>3D Molecule Viewer</Typography>
-      <Grid2 container spacing={2} sx={{}}>
-        <Grid2 size={6} sx={{display: "grid", gridAutoRows: "80% 20%", margin: 2, gap: 3}}>
+      <Grid2 container spacing={2}>
+        <Grid2 offset={{md: 1}} size={5} sx={{display: "grid", gridAutoRows: "50% 10%", margin: 2, gap: 0}}>
           <Molecule3D key={color} color={color} moleculedata={moleculedata} style={style} />
           <Box sx={{textAlign: "center"}}>
             <Tooltip title="Change Background Colour" arrow>
@@ -60,16 +61,19 @@ function MoleculeViewer() {
             </Tooltip>
             <StyleToggle style={style} setStyle={setStyle} />
           </Box>
+          <Box style={{position: "relative"}}>
+            <MoleculeDataTextArea moleculedata={moleculedata} setmoleculeData={setmoleculeData} />
+          </Box>
+        </Grid2>
+        <Grid2 size={5}>
+          <FormPage moleculedata={moleculedata} />
+          <Divider variant="middle" />
           <Box sx={{textAlign: "center"}}>
+            <Typography variant="h4" sx={{my:5}}>Molecule Examples</Typography>
             {moleculeTemplateList.map((data)=>{
               return <Button variant="outlined" sx={{m: 1}} value={data} onClick={templateMolecule}>{data}</Button>
             })}
           </Box>
-        </Grid2>
-        <Grid2 size={5}>
-          <div style={{position: "relative"}}>
-            <MoleculeDataTextArea moleculedata={moleculedata} setmoleculeData={setmoleculeData} />
-          </div>
         </Grid2>
       </Grid2>
     </>

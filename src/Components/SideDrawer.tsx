@@ -29,14 +29,6 @@ export default function SideDrawer() {
                     </ListItemButton>
                 </Link>
               </ListItem>
-              <ListItem key="Form Viewer" disablePadding>
-                <Link to={"/Conexs/form"} style={{textDecoration: "none", color: "black"}}>
-                    <ListItemButton>
-                        <ListItemIcon><EditNoteIcon /></ListItemIcon>
-                        <ListItemText primary="Form Viewer" />
-                    </ListItemButton>
-                </Link>
-              </ListItem>
           </List>
         </Box>
       );

@@ -44,6 +44,9 @@ importers:
       '@types/ndarray':
         specifier: ^1.0.14
         version: 1.0.14
+      '@types/react-jsonschema-form':
+        specifier: ^1.7.13
+        version: 1.7.13
       jquery:
         specifier: ^3.7.1
         version: 3.7.1
@@ -861,6 +864,9 @@ packages:
 
   '@types/react-dom@18.3.0':
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
+
+  '@types/react-jsonschema-form@1.7.13':
+    resolution: {integrity: sha512-C2jgO7/ow76oCSfUK++jKKox17R0A7ryMYNE5hJ2dR1Ske9jhuvjIlurvzMePh+Xjk8wey0nzB2C7HFKe2pRdg==}
 
   '@types/react-reconciler@0.26.7':
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
@@ -3047,6 +3053,11 @@ snapshots:
 
   '@types/react-dom@18.3.0':
     dependencies:
+      '@types/react': 18.3.10
+
+  '@types/react-jsonschema-form@1.7.13':
+    dependencies:
+      '@types/json-schema': 7.0.15
       '@types/react': 18.3.10
 
   '@types/react-reconciler@0.26.7':
