@@ -1,8 +1,9 @@
 import SideDrawer from "./Components/SideDrawer";
 import '@h5web/lib/styles.css'
 import { Domain, getDomain, VisCanvas, DataCurve, DefaultInteractions } from '@h5web/lib';
-import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
+import { datxvalues, datyvalues, stkxvalues, stkyvalues, xdomainvalues, ydomainvalues } from "./Components/graphdata"
 
 export default function GraphPage() {
     const [xdomain, setxDomain] = useState<Domain>();
@@ -52,49 +53,62 @@ export default function GraphPage() {
             setYValues(yVals)
             setxDomain(getDomain(xVals));
             setyDomain(getDomain(yVals));
+            console.log("xdomain", xdomain)
+            console.log("ydomain", ydomain)
+            console.log("xValues", xValues)
+            console.log("yValues", yValues)
+            console.log("xValues2", xValues2)
+            console.log("yValues2", yValues2)
           };
     
           reader.readAsText(file); // Read the file as text
         }
-      };
+    };
 
-      const handleFileUpload2 = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!event.target.files) return;
-        
-        const file = event.target.files[0];
+    const handleFileUpload2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
     
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                let content = reader.result as string;
-                if (file.type == "application/hyperstudio") {
-                    content = stkFilePreprocessing(content)
-                }
-                
-                const lines = content.split('\n');
-                const xVals: number[] = [];
-                const yVals: number[] = [];
-    
-                lines.forEach((line) => {
-                    const [x, y] = line.trim().split(/\s+/); // Split by space or tabs
-                    if (x && y) {
-                        xVals.push(parseFloat(x)); // Parse x values
-                        yVals.push(parseFloat(y)); // Parse y values
-                    }
-                });
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            let content = reader.result as string;
+            if (file.type == "application/hyperstudio") {
+                content = stkFilePreprocessing(content)
+            }
             
-            setXValues2(xVals);
-            setYValues2(yVals);
-            setxDomain(getDomain(xVals));
-            setyDomain(getDomain(yVals));
-          };
-    
-          reader.readAsText(file); // Read the file as text
-        };
+            const lines = content.split('\n');
+            const xVals: number[] = [];
+            const yVals: number[] = [];
+
+            lines.forEach((line) => {
+                const [x, y] = line.trim().split(/\s+/); // Split by space or tabs
+                if (x && y) {
+                    xVals.push(parseFloat(x)); // Parse x values
+                    yVals.push(parseFloat(y)); // Parse y values
+                }
+            });
         
-      };
+        setXValues2(xVals);
+        setYValues2(yVals);
+        setxDomain(getDomain(xVals));
+        setyDomain(getDomain(yVals));
+        };
+
+        reader.readAsText(file); // Read the file as text
+    };
     
-    
+    };
+
+    const exampleGraph = () => {
+        setxDomain(xdomainvalues);
+        setyDomain(ydomainvalues);
+        setXValues(stkxvalues)
+        setYValues(stkyvalues)
+        setXValues2(datxvalues);
+        setYValues2(datyvalues);
+    }
 
   return (
     <>
@@ -130,7 +144,10 @@ export default function GraphPage() {
                         visible
                     />
                 </VisCanvas>
-            ) : <p>Please upload a valid '.dat' file in the first and a '.stk' file in the second.</p>}
+            ) : <>
+                <p>Please upload a valid '.dat' file in the first and a '.stk' file in the second.</p>
+                <Button variant="outlined" sx={{m:5}} onClick={exampleGraph} >Example of Graph</Button>
+            </>}
 
         </Box>
     </>
