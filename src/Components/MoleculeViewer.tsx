@@ -70,8 +70,8 @@ function MoleculeViewer() {
           <Divider variant="middle" />
           <Box sx={{textAlign: "center"}}>
             <Typography variant="h4" sx={{my:5}}>Molecule Examples</Typography>
-            {moleculeTemplateList.map((data)=>{
-              return <Button variant="outlined" sx={{m: 1}} value={data} onClick={templateMolecule}>{data}</Button>
+            {moleculeTemplateList.map((data, index)=>{
+              return <Button variant="outlined" key={index} sx={{m: 1}} value={data} onClick={templateMolecule}>{data}</Button>
             })}
           </Box>
         </Grid2>

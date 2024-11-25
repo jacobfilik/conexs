@@ -2,14 +2,16 @@ import { Box, Button, Typography } from "@mui/material"
 import Form from "@rjsf/mui"
 import { RJSFSchema, UiSchema } from "@rjsf/utils"
 import validator from '@rjsf/validator-ajv8'
-import { useRef } from "react"
+import React from "react"
+import { useRef, useState } from "react"
 
 type formProps = {
     moleculedata: string
 }
 
-export default function FormPage(props: formProps) {
+function FormPage(props: formProps) {
     const downloadLinkRef = useRef<HTMLAnchorElement>(null);
+    const [data, setData] = useState<FormData>();
     
     const schema: RJSFSchema = {
         title: "Simulation Form",
@@ -21,7 +23,7 @@ export default function FormPage(props: formProps) {
                     "XAS",
                     "XES"
                 ],
-                default: "XAS"
+                default: "XES"
             },
             "Functional": {
                 title: 'Functional',
@@ -63,7 +65,7 @@ export default function FormPage(props: formProps) {
                     "Acetonitrile",
                     "Ammonia",
                     "Benzene",
-                    "CC14",
+                    "CCl4",
                     "CH2C12",
                     "Chloroform",
                     "Cyclohexane",
@@ -81,7 +83,8 @@ export default function FormPage(props: formProps) {
             },
             "CPUs": {
                 title: "CPUs",
-                type: 'number'
+                type: 'number',
+                default: 4
             }
         },
         "dependencies": {
@@ -90,19 +93,23 @@ export default function FormPage(props: formProps) {
                     {
                     "properties": {
                         "Technique": {
-                        "enum": ["XAS"]
+                        "enum": ["XAS"],
                         },
                         "OrbWin[0] Start": {
-                            "type": "number"
+                            "type": "number",
+                            default: 0
                         },
                         "OrbWin[0] Stop": {
-                            "type": "number"
+                            "type": "number",
+                            default: 0
                         },
                         "OrbWin[1] Start": {
-                            "type": "number"
+                            "type": "number",
+                            default: 0
                         },
                         "OrbWin[1] Stop": {
-                            "type": "number"
+                            "type": "number",
+                            default: 0
                         }
                     }
                     }
@@ -213,8 +220,6 @@ export default function FormPage(props: formProps) {
         formOutput += '*xyz ' + formData["Charge Value"] + ' ' + formData["Multiplicity Value"]+ "\n"
         formOutput += props.moleculedata.split("\n").slice(2,).join("\n");
 
-        console.log(formOutput);
-
         const blob = new Blob([formOutput], { type: 'text/plain' });
         if (downloadLinkRef.current) {
             const link = downloadLinkRef.current;
@@ -227,9 +232,11 @@ export default function FormPage(props: formProps) {
     return <>
         <Box>
             <Form
-                schema={schema} 
-                uiSchema={uiSchema} 
+                schema={schema}
+                uiSchema={uiSchema}
                 validator={validator}
+                onChange={({formData}) => setData(formData)}
+                formData={data}
                 onSubmit={({formData}) => formDataProcessing(formData)}
             >
                 <Box textAlign="center">
@@ -247,3 +254,5 @@ export default function FormPage(props: formProps) {
         </Box>
     </>
 }
+
+export default React.memo(FormPage)
