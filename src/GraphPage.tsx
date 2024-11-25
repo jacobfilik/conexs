@@ -50,15 +50,9 @@ export default function GraphPage() {
                 });
             
             setXValues(xVals);
-            setYValues(yVals)
+            setYValues(yVals);
             setxDomain(getDomain(xVals));
             setyDomain(getDomain(yVals));
-            console.log("xdomain", xdomain)
-            console.log("ydomain", ydomain)
-            console.log("xValues", xValues)
-            console.log("yValues", yValues)
-            console.log("xValues2", xValues2)
-            console.log("yValues2", yValues2)
           };
     
           reader.readAsText(file); // Read the file as text
@@ -102,8 +96,8 @@ export default function GraphPage() {
     };
 
     const exampleGraph = () => {
-        setxDomain(xdomainvalues);
-        setyDomain(ydomainvalues);
+        setxDomain(getDomain(xdomainvalues));
+        setyDomain(getDomain(ydomainvalues));
         setXValues(stkxvalues)
         setYValues(stkyvalues)
         setXValues2(datxvalues);
