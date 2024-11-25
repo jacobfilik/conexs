@@ -79,6 +79,10 @@ export default function FormPage(props: formProps) {
                 ],
                 default: "None"
             },
+            "CPUs": {
+                title: "CPUs",
+                type: 'number'
+            }
         },
         "dependencies": {
             "Technique": {
@@ -145,6 +149,7 @@ export default function FormPage(props: formProps) {
         "Charge Value": number,
         "Multiplicity Value": number,
         Solvent: string,
+        CPUs: number,
         "OrbWin[0] Start": number,
         "OrbWin[0] Stop": number,
         "OrbWin[1] Start": number,
@@ -160,7 +165,7 @@ export default function FormPage(props: formProps) {
             }
             formOutput += '\n'
             formOutput += '%maxcore 5024' + "\n\n"
-            formOutput += '%pal nprocs ' + conexsInformation.cpus + "\n"
+            formOutput += '%pal nprocs ' + formData.CPUs + "\n"
             formOutput += 'end' + "\n\n"
             formOutput += '%tddft' + "\n"
 
@@ -179,7 +184,7 @@ export default function FormPage(props: formProps) {
                 formOutput += 'CPCM(' + formData.Solvent + ') '
             }
             formOutput += '%maxcore 5024' + "\n\n"
-            formOutput += '%pal nprocs ' + conexsInformation.cpus + "\n"
+            formOutput += '%pal nprocs ' + formData.CPUs + "\n"
             formOutput += 'end' + "\n\n"
             formOutput += '%xes' + "\n"
             formOutput += 'CoreOrb 0,1' + "\n"
