@@ -10,8 +10,8 @@ export default function GraphPage() {
     const [ydomain, setyDomain] = useState<Domain>();
     const [xValues, setXValues] = useState<number[]>([]);
     const [yValues, setYValues] = useState<number[]>([]);
-    const [xValues2, setXValues2] = useState<number[]>([]);
-    const [yValues2, setYValues2] = useState<number[]>([]);
+    const [xValues2, setXValues2] = useState<number|null[]>([]);
+    const [yValues2, setYValues2] = useState<number|null[]>([]);
 
     function stkFilePreprocessing(content: string) {
         const lines = content.split("\n");
@@ -98,8 +98,8 @@ export default function GraphPage() {
     const exampleGraph = () => {
         setxDomain(getDomain(xdomainvalues));
         setyDomain(getDomain(ydomainvalues));
-        setXValues(stkxvalues)
-        setYValues(stkyvalues)
+        setXValues(stkxvalues);
+        setYValues(stkyvalues);
         setXValues2(datxvalues);
         setYValues2(datyvalues);
     }
