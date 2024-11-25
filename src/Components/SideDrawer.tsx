@@ -3,7 +3,6 @@ import { useState } from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Link } from "react-router-dom";
 
 export default function SideDrawer() {
