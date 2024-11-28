@@ -1,41 +1,63 @@
-import { Box, Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Box,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useState } from "react";
-import MenuIcon from '@mui/icons-material/Menu';
-import ViewInArIcon from '@mui/icons-material/ViewInAr';
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import MenuIcon from "@mui/icons-material/Menu";
+import ViewInArIcon from "@mui/icons-material/ViewInAr";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
 import { Link } from "react-router-dom";
 
 export default function SideDrawer() {
-    const [open, setOpen] = useState(false);
-    const toggleDrawer = (newOpen: boolean) => () => {setOpen(newOpen);};
+  const [open, setOpen] = useState(false);
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
 
-    const DrawerList = (
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-            <List>
-              <ListItem key="Molecule Viewer" disablePadding>
-                <Link to={"/Conexs/"} style={{textDecoration: "none", color: "black"}}>
-                    <ListItemButton>
-                        <ListItemIcon><ViewInArIcon /></ListItemIcon>
-                        <ListItemText primary="Molecule Viewer" />
-                    </ListItemButton>
-                </Link>
-              </ListItem>
-              <ListItem key="Graph Viewer" disablePadding>
-                <Link to={"/Conexs/graph"} style={{textDecoration: "none", color: "black"}}>
-                    <ListItemButton>
-                        <ListItemIcon><QueryStatsIcon /></ListItemIcon>
-                        <ListItemText primary="Graph Viewer" />
-                    </ListItemButton>
-                </Link>
-              </ListItem>
-          </List>
-        </Box>
-      );
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        <ListItem key="Input Generator" disablePadding>
+          <Link to={"/"} style={{ textDecoration: "none", color: "black" }}>
+            <ListItemButton>
+              <ListItemIcon>
+                <ViewInArIcon />
+              </ListItemIcon>
+              <ListItemText primary="Input Generator" />
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem key="esult Viewer" disablePadding>
+          <Link
+            to={"/graph"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <QueryStatsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Result Viewer" />
+            </ListItemButton>
+          </Link>
+        </ListItem>
+      </List>
+    </Box>
+  );
 
-    return <>
-        <Button onClick={toggleDrawer(true)}><MenuIcon fontSize="large" /></Button>
-        <Drawer open={open} onClose={toggleDrawer(false)}>
-            {DrawerList}
-        </Drawer>
+  return (
+    <>
+      <Button onClick={toggleDrawer(true)}>
+        <MenuIcon fontSize="large" />
+      </Button>
+      <Drawer open={open} onClose={toggleDrawer(false)}>
+        {DrawerList}
+      </Drawer>
     </>
+  );
 }
