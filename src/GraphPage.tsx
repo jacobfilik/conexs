@@ -1,4 +1,3 @@
-import SideDrawer from "./components/SideDrawer";
 import "@h5web/lib/styles.css";
 import {
   Domain,
@@ -10,7 +9,7 @@ import {
   TooltipMesh,
 } from "@h5web/lib";
 import React, { useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import {
   datxvalues,
   datyvalues,
@@ -23,12 +22,12 @@ import {
 import { ReactElement } from "react";
 
 export default function GraphPage() {
-  const [xdomain, setxDomain] = useState<Domain>();
-  const [ydomain, setyDomain] = useState<Domain>();
-  const [xValues, setXValues] = useState<number[]>([]);
-  const [yValues, setYValues] = useState<number[]>([]);
-  const [xValues2, setXValues2] = useState<number[]>([]);
-  const [yValues2, setYValues2] = useState<number[]>([]);
+  const [xdomain, setxDomain] = useState<Domain>([0, 1]);
+  const [ydomain, setyDomain] = useState<Domain>([0, 1]);
+  const [xValues, setXValues] = useState<number[]>([0]);
+  const [yValues, setYValues] = useState<number[]>([0]);
+  const [xValues2, setXValues2] = useState<number[]>([0]);
+  const [yValues2, setYValues2] = useState<number[]>([0]);
 
   function stkFilePreprocessing(content: string) {
     const lines = content.split("\n");
@@ -80,8 +79,10 @@ export default function GraphPage() {
 
         setXValues(xVals);
         setYValues(yVals);
-        setxDomain(getDomain(xVals));
-        setyDomain(getDomain(yVals));
+        const xdom = getDomain(xVals);
+        const ydom = getDomain(yVals);
+        setxDomain(xdom ? xdom : xdomain);
+        setyDomain(ydom ? ydom : ydomain);
       };
 
       reader.readAsText(file); // Read the file as text
@@ -115,8 +116,10 @@ export default function GraphPage() {
 
         setXValues2(xVals);
         setYValues2(yVals);
-        setxDomain(getDomain(xVals));
-        setyDomain(getDomain(yVals));
+        const xdom = getDomain(xVals);
+        const ydom = getDomain(yVals);
+        setxDomain(xdom ? xdom : xdomain);
+        setyDomain(ydom ? ydom : ydomain);
       };
 
       reader.readAsText(file); // Read the file as text
@@ -132,8 +135,10 @@ export default function GraphPage() {
   };
 
   const exampleGraph = () => {
-    setxDomain(getDomain(xdomainvalues));
-    setyDomain(getDomain(ydomainvalues));
+    const xdom = getDomain(xdomainvalues);
+    const ydom = getDomain(ydomainvalues);
+    setxDomain(xdom ? xdom : xdomain);
+    setyDomain(ydom ? ydom : ydomain);
     setXValues(stkxvalues);
     setYValues(stkyvalues);
     setXValues2(datxvalues);
@@ -141,57 +146,101 @@ export default function GraphPage() {
   };
 
   return (
-    <>
-      <SideDrawer />
-      <Typography variant="h3" sx={{ textAlign: "Left" }}>
-        ORCA Result Viewer
-      </Typography>
-      <Typography variant="h5" sx={{ textAlign: "center" }}>
-        Upload `.stk` or `.dat` file to visualize
-      </Typography>
-      <Box sx={{ textAlign: "center" }}>
-        <input type="file" onChange={handleFileUpload1} />
-        <input type="file" onChange={handleFileUpload2} />
+    <Stack direction="row" height="100%">
+      <Stack>
+        <Typography variant="h3" sx={{ textAlign: "Left" }}>
+          ORCA Result Viewer
+        </Typography>
 
-        {ydomain && xdomain ? ( // Abscissa refers to x axis and ordinate refers to the y axis
-          <VisCanvas
-            abscissaConfig={{
-              showGrid: true,
-              visDomain: [xdomain[0], xdomain[1]],
-            }}
-            ordinateConfig={{
-              showGrid: true,
-              visDomain: [ydomain[0], ydomain[1]],
-            }}
-          >
-            <DefaultInteractions />
-            <TooltipMesh renderTooltip={tooltipText} />
-            <ResetZoomButton />
-            <DataCurve
-              abscissas={xValues}
-              color="green"
-              ordinates={yValues}
-              visible
-            />
-            <DataCurve
-              abscissas={xValues2}
-              color="orange"
-              ordinates={yValues2}
-              visible
-            />
-          </VisCanvas>
-        ) : (
-          <>
-            <p>
-              Please upload a valid '.dat' file in the first and a '.stk' file
-              in the second.
-            </p>
-            <Button variant="outlined" sx={{ m: 5 }} onClick={exampleGraph}>
-              Example of Graph
-            </Button>
-          </>
-        )}
-      </Box>
-    </>
+        <Typography variant="h5" sx={{ textAlign: "center" }}>
+          Upload `.stk` or `.dat` file to visualize
+        </Typography>
+        <Box sx={{ textAlign: "center" }}>
+          <input type="file" onChange={handleFileUpload1} />
+          <input type="file" onChange={handleFileUpload2} />
+        </Box>
+
+        <Button variant="outlined" sx={{ m: 5 }} onClick={exampleGraph}>
+          Example of Graph
+        </Button>
+      </Stack>
+      <VisCanvas
+        abscissaConfig={{
+          showGrid: true,
+          visDomain: [xdomain[0], xdomain[1]],
+        }}
+        ordinateConfig={{
+          showGrid: true,
+          visDomain: [ydomain[0], ydomain[1]],
+        }}
+      >
+        <DefaultInteractions />
+        <TooltipMesh renderTooltip={tooltipText} />
+        <ResetZoomButton />
+        <DataCurve
+          abscissas={xValues}
+          color="green"
+          ordinates={yValues}
+          visible
+        />
+        <DataCurve
+          abscissas={xValues2}
+          color="orange"
+          ordinates={yValues2}
+          visible
+        />
+      </VisCanvas>
+    </Stack>
+    // <>
+    //   <Typography variant="h3" sx={{ textAlign: "Left" }}>
+    //     ORCA Result Viewer
+    //   </Typography>
+    //   <Typography variant="h5" sx={{ textAlign: "center" }}>
+    //     Upload `.stk` or `.dat` file to visualize
+    //   </Typography>
+    //   <Box sx={{ textAlign: "center" }}>
+    //     <input type="file" onChange={handleFileUpload1} />
+    //     <input type="file" onChange={handleFileUpload2} />
+
+    //     {ydomain && xdomain ? ( // Abscissa refers to x axis and ordinate refers to the y axis
+    //       <VisCanvas
+    //         abscissaConfig={{
+    //           showGrid: true,
+    //           visDomain: [xdomain[0], xdomain[1]],
+    //         }}
+    //         ordinateConfig={{
+    //           showGrid: true,
+    //           visDomain: [ydomain[0], ydomain[1]],
+    //         }}
+    //       >
+    //         <DefaultInteractions />
+    //         <TooltipMesh renderTooltip={tooltipText} />
+    //         <ResetZoomButton />
+    //         <DataCurve
+    //           abscissas={xValues}
+    //           color="green"
+    //           ordinates={yValues}
+    //           visible
+    //         />
+    //         <DataCurve
+    //           abscissas={xValues2}
+    //           color="orange"
+    //           ordinates={yValues2}
+    //           visible
+    //         />
+    //       </VisCanvas>
+    //     ) : (
+    //       <>
+    //         <p>
+    //           Please upload a valid '.dat' file in the first and a '.stk' file
+    //           in the second.
+    //         </p>
+    //         <Button variant="outlined" sx={{ m: 5 }} onClick={exampleGraph}>
+    //           Example of Graph
+    //         </Button>
+    //       </>
+    //     )}
+    //   </Box>
+    // </>
   );
 }

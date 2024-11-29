@@ -11,9 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import StyleToggle from "./StyleToggle";
-import SideDrawer from "./SideDrawer";
 import FormPage from "../FormPage";
-import ConexsIcon from "./ConexsIcon";
 
 function MoleculeViewer() {
   const [color, setcolor] = useState("#3465A4");
@@ -85,9 +83,7 @@ function MoleculeViewer() {
   return (
     <>
       <Stack direction="row" alignItems={"center"} spacing={2}>
-        <SideDrawer />
-        <ConexsIcon />
-        <Typography variant="h3" sx={{ textAlign: "left" }}>
+        <Typography variant="h4" sx={{ textAlign: "left" }}>
           ORCA XAS Input File Generator
         </Typography>
       </Stack>
