@@ -14,7 +14,6 @@ import StyleToggle from "./StyleToggle";
 import SideDrawer from "./SideDrawer";
 import FormPage from "../FormPage";
 import ConexsIcon from "./ConexsIcon";
-import TestIcon from "./TestIcon";
 
 function MoleculeViewer() {
   const [color, setcolor] = useState("#3465A4");
