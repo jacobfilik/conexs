@@ -1,7 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import GraphPage from "./GraphPage";
-import MoleculeViewer from "./Components/MoleculeViewer";
+import MoleculeViewer from "./components/MoleculeViewer";
 
 function App() {
   return (

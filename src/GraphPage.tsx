@@ -1,4 +1,4 @@
-import SideDrawer from "./Components/SideDrawer";
+import SideDrawer from "./components/SideDrawer";
 import "@h5web/lib/styles.css";
 import {
   Domain,
@@ -18,7 +18,7 @@ import {
   stkyvalues,
   xdomainvalues,
   ydomainvalues,
-} from "./Components/graphdata";
+} from "./components/graphdata";
 
 import { ReactElement } from "react";
 
