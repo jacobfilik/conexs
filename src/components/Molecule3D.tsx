@@ -57,13 +57,13 @@ function Molecule3D(props: Molecule3DProps) {
       if (isosurface) {
         viewer.addIsosurface(voldata, {
           isoval: positiveMin,
-          color: "blue",
+          color: positiveColor,
           alpha: 0.95,
           smoothness: 10,
         });
         viewer.addIsosurface(voldata, {
           isoval: -1 * negativeMin,
-          color: "red",
+          color: negativeColor,
           alpha: 0.95,
           smoothness: 10,
         });
