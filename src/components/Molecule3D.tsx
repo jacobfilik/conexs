@@ -3,7 +3,7 @@ import * as mol3d from "3dmol";
 
 interface Molecule3DProps {
   color: string;
-  moleculedata: string;
+  moleculedata: string | null;
   style: string;
   orbital: Orbital | null;
 }
@@ -20,6 +20,7 @@ export interface TransferFunction {
   positiveMax: number;
   negativeMin: number;
   negativeMax: number;
+  isosurface: boolean;
 }
 
 function Molecule3D(props: Molecule3DProps) {
@@ -38,20 +39,9 @@ function Molecule3D(props: Molecule3DProps) {
     const viewer = mol3d.createViewer(moleculeViewer.current, {
       backgroundColor: props.color,
     });
-    const model = viewer.addModel(props.moleculedata, "xyz");
-    if (props.style == "Stick") {
-      viewer.setStyle({}, { stick: { color: "spectrum" } });
-    } else if (props.style == "Sphere") {
-      viewer.setStyle({}, { sphere: { color: "spectrum", radius: 1 } });
-    }
-    viewer.addUnitCell(model, {
-      box: { color: "purple" },
-      alabel: "X",
-      blabel: "Y",
-      clabel: "Z",
-    });
 
     if (props.orbital) {
+      viewer.addModel(props.orbital.cubeData, "cube");
       const voldata = new mol3d.VolumeData(props.orbital.cubeData, "cube");
 
       const {
@@ -61,17 +51,47 @@ function Molecule3D(props: Molecule3DProps) {
         positiveMax,
         negativeMin,
         negativeMax,
+        isosurface,
       } = props.orbital.transferfn;
 
-      viewer.addVolumetricRender(voldata, {
-        transferfn: [
-          { color: positiveColor, opacity: 0.075, value: positiveMax },
-          { color: positiveColor, opacity: 0.001, value: positiveMin },
-          { color: "white", opacity: 0, value: 0 },
-          { color: negativeColor, opacity: 0.001, value: negativeMin * -1 },
-          { color: negativeColor, opacity: 0.075, value: negativeMax * -1 },
-        ],
+      if (isosurface) {
+        viewer.addIsosurface(voldata, {
+          isoval: positiveMin,
+          color: "blue",
+          alpha: 0.95,
+          smoothness: 10,
+        });
+        viewer.addIsosurface(voldata, {
+          isoval: -1 * negativeMin,
+          color: "red",
+          alpha: 0.95,
+          smoothness: 10,
+        });
+      } else {
+        viewer.addVolumetricRender(voldata, {
+          transferfn: [
+            { color: positiveColor, opacity: 0.075, value: positiveMax },
+            { color: positiveColor, opacity: 0.001, value: positiveMin },
+            { color: "white", opacity: 0, value: 0 },
+            { color: negativeColor, opacity: 0.001, value: negativeMin * -1 },
+            { color: negativeColor, opacity: 0.075, value: negativeMax * -1 },
+          ],
+        });
+      }
+    } else if (props.moleculedata) {
+      const model = viewer.addModel(props.moleculedata, "xyz");
+      viewer.addUnitCell(model, {
+        box: { color: "purple" },
+        alabel: "X",
+        blabel: "Y",
+        clabel: "Z",
       });
+    }
+
+    if (props.style == "Stick") {
+      viewer.setStyle({}, { stick: { color: "spectrum" } });
+    } else if (props.style == "Sphere") {
+      viewer.setStyle({}, { sphere: { color: "spectrum", radius: 1 } });
     }
 
     viewer.zoomTo();
