@@ -14,9 +14,6 @@ export default function OrbitalPage() {
   const [color, setcolor] = useState("#3465A4");
   const [style, setStyle] = useState("Stick");
   const [volumeData, setVolumeData] = useState<string | null>(null);
-  const [moleculedata, setmoleculeData] = useState(
-    "12\nBenzene molecule\nC   0.000000  1.402720  0.000000\nH   0.000000  2.490290  0.000000\nC  -1.214790  0.701360  0.000000\nH  -2.156660  1.245150  0.000000\nC  -1.214790 -0.701360  0.000000\nH  -2.156660 -1.245150  0.000000\nC   0.000000 -1.402720  0.000000\nH   0.000000 -2.490290  0.000000\nC   1.214790 -0.701360  0.000000\nH   2.156660 -1.245150  0.000000\nC   1.214790  0.701360  0.000000\nH   2.156660  1.245150  0.000000"
-  );
   const [volumeParams, setVolumeParams] = useState<TransferFunction>({
     positiveColor: "#FF0000",
     negativeColor: "#0000FF",
@@ -24,6 +21,7 @@ export default function OrbitalPage() {
     positiveMax: 0.1,
     negativeMin: 0.01,
     negativeMax: 0.1,
+    isosurface: false,
   });
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,17 +29,13 @@ export default function OrbitalPage() {
     const file = event.target.files[0];
     console.log(file.name);
 
-    if (file.name.endsWith(".cube") || file.name.endsWith(".xyz")) {
+    if (file.name.endsWith(".cube")) {
       const reader = new FileReader();
       console.log("To load");
       reader.onload = function () {
         const content = reader.result as string;
 
-        if (file.name.endsWith(".cube")) {
-          setVolumeData(content);
-        } else {
-          setmoleculeData(content);
-        }
+        setVolumeData(content);
       };
       reader.readAsText(file); // Read the file as text
     }
@@ -81,6 +75,11 @@ export default function OrbitalPage() {
         type: "number",
         default: volumeParams.negativeMax,
       },
+      isosurface: {
+        title: "Show as Surface",
+        type: "boolean",
+        default: volumeParams.isosurface,
+      },
     },
   };
 
@@ -100,6 +99,7 @@ export default function OrbitalPage() {
     negativeMax: number;
     positiveMax: number;
     positiveMin: number;
+    isosurface: boolean;
   }) => setVolumeParams(formData);
 
   return (
@@ -111,7 +111,7 @@ export default function OrbitalPage() {
           tabIndex={-1}
           component="label"
         >
-          Upload XYZ or Cube
+          Upload Cube File
           <VisuallyHiddenInput
             type="file"
             name="file1"
@@ -152,7 +152,7 @@ export default function OrbitalPage() {
       <Molecule3D
         key={color}
         color={color}
-        moleculedata={moleculedata}
+        moleculedata={null}
         orbital={
           volumeData == null
             ? null
