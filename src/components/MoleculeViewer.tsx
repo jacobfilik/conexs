@@ -15,8 +15,7 @@ import FormPage from "../FormPage";
 
 import axios from "axios";
 
-const basename = import.meta.env.BASE_URL 
-
+const basename = import.meta.env.BASE_URL;
 
 function MoleculeViewer() {
   const [color, setcolor] = useState("#3465A4");
@@ -25,21 +24,36 @@ function MoleculeViewer() {
     "12\nBenzene molecule\nC   0.000000  1.402720  0.000000\nH   0.000000  2.490290  0.000000\nC  -1.214790  0.701360  0.000000\nH  -2.156660  1.245150  0.000000\nC  -1.214790 -0.701360  0.000000\nH  -2.156660 -1.245150  0.000000\nC   0.000000 -1.402720  0.000000\nH   0.000000 -2.490290  0.000000\nC   1.214790 -0.701360  0.000000\nH   2.156660 -1.245150  0.000000\nC   1.214790  0.701360  0.000000\nH   2.156660  1.245150  0.000000"
   );
 
-  const exampleMolecules = [{name: "Glucose", path: "xyz/glucose.xyz"},
-    {name: "Carbon Dioxide", path: "xyz/co2.xyz"},
-    {name: "Water", path: "xyz/water.xyz"},
-    {name: "Benzene", path: "xyz/benzene.xyz"},
-    {name: "Chloroethane", path: "xyz/chloroethane.xyz"},
-    {name: "Pyridine", path: "xyz/pyridine.xyz"},
-    {name: "Lattice Example", path: "xyz/lattice.xyz"},
-    {name: "Iron Complex", path: "xyz/fecomplex.xyz"},
-  ]
+  const exampleMolecules = [
+    { name: "Glucose", path: "xyz/glucose.xyz" },
+    { name: "Carbon Dioxide", path: "xyz/co2.xyz" },
+    { name: "Water", path: "xyz/water.xyz" },
+    { name: "Benzene", path: "xyz/benzene.xyz" },
+    { name: "Chloroethane", path: "xyz/chloroethane.xyz" },
+    { name: "Pyridine", path: "xyz/pyridine.xyz" },
+    { name: "Lattice Example", path: "xyz/lattice.xyz" },
+    { name: "Iron Complex", path: "xyz/fecomplex.xyz" },
+  ];
 
-  const getXYZ = (path : string) => {
-        axios.get(basename + path, {headers: {'Content-Type': 'application/plain'}}).then((response) => {
-          setmoleculeData(response.data)
-        });
-      };
+  // const getCube = () => {
+  //   axios
+  //     .get("https://3dmol.csb.pitt.edu/tests/test_structs/benzene-homo.cube", {
+  //       headers: { "Content-Type": "application/plain" },
+  //     })
+  //     .then((response) => {
+  //       setVolumeData(response.data);
+  //     });
+  // };
+
+  const getXYZ = (path: string) => {
+    axios
+      .get(basename + path, {
+        headers: { "Content-Type": "application/plain" },
+      })
+      .then((response) => {
+        setmoleculeData(response.data);
+      });
+  };
 
   return (
     <>
@@ -59,6 +73,7 @@ function MoleculeViewer() {
             color={color}
             moleculedata={moleculedata}
             style={style}
+            orbital={null}
           />
           <Box sx={{ textAlign: "center" }}>
             <Tooltip title="Change Background Colour" arrow>
