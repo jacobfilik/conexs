@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Header from "./components/Header";
 import WelcomePage from "./components/WelcomePage";
+import OrbitalPage from "./OrbitalPage";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -44,6 +45,7 @@ function App() {
           <Route path="/" element={<WelcomePage />} />
           <Route path="/orcainput" element={<MoleculeViewer />} />
           <Route path="/orcaresult" element={<GraphPage />} />
+          <Route path="/orbitalviewer" element={<OrbitalPage />} />
         </Routes>
       </Stack>
     </ThemeProvider>

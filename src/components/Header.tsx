@@ -22,6 +22,7 @@ export default function Header(props: {
     Home: "/",
     OrcaInput: "/orcainput",
     OrcaResult: "/orcaresult",
+    Orbital: "/orbitalviewer",
   };
 
   return (
