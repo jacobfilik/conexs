@@ -1,8 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import Form from "@rjsf/mui";
-import { RJSFSchema, UiSchema } from "@rjsf/utils";
+import { RJSFSchema, TitleFieldProps, UiSchema } from "@rjsf/utils";
 import validator from "@rjsf/validator-ajv8";
-import React from "react";
 import { useRef, useState } from "react";
 
 type formProps = {
@@ -14,7 +13,7 @@ function FormPage(props: formProps) {
   const [data, setData] = useState<FormData>();
 
   const schema: RJSFSchema = {
-    title: "Input File Values",
+    title: "Simulation Parameters",
     type: "object",
     properties: {
       Technique: {
@@ -236,6 +235,11 @@ function FormPage(props: formProps) {
     }
   }
 
+  function TitleFieldTemplate(props: TitleFieldProps) {
+    const { title } = props;
+    return <Typography>{title}</Typography>;
+  }
+
   return (
     <>
       <Box>
@@ -243,18 +247,14 @@ function FormPage(props: formProps) {
           schema={schema}
           uiSchema={uiSchema}
           validator={validator}
+          templates={{ TitleFieldTemplate }}
           onChange={({ formData }) => setData(formData)}
           formData={data}
           onSubmit={({ formData }) => formDataProcessing(formData)}
         >
           <Box textAlign="center">
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ m: 5, p: 2 }}
-              type="submit"
-            >
-              <Typography variant="h5">Download</Typography>
+            <Button variant="contained" sx={{ m: 5, p: 2 }} type="submit">
+              Download Input File
             </Button>
           </Box>
         </Form>
@@ -265,4 +265,4 @@ function FormPage(props: formProps) {
   );
 }
 
-export default React.memo(FormPage);
+export default FormPage;
