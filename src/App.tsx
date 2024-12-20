@@ -1,7 +1,4 @@
-import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import GraphPage from "./GraphPage";
-import MoleculeViewer from "./components/MoleculeViewer";
 
 import { useMediaQuery, CssBaseline, Stack } from "@mui/material";
 import { useState, useMemo } from "react";
@@ -10,7 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Header from "./components/Header";
 import WelcomePage from "./components/WelcomePage";
-import OrbitalPage from "./OrbitalPage";
+import OrcaPage from "./OrcaPage";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -43,9 +40,7 @@ function App() {
         <Header colorMode={mode} toggleColorMode={colorMode.toggleColorMode} />
         <Routes>
           <Route path="/" element={<WelcomePage />} />
-          <Route path="/orcainput" element={<MoleculeViewer />} />
-          <Route path="/orcaresult" element={<GraphPage />} />
-          <Route path="/orbitalviewer" element={<OrbitalPage />} />
+          <Route path="/orca" element={<OrcaPage />} />
         </Routes>
       </Stack>
     </ThemeProvider>

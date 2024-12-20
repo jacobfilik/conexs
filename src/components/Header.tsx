@@ -20,9 +20,7 @@ export default function Header(props: {
 }) {
   const navitems = {
     Home: "/",
-    OrcaInput: "/orcainput",
-    OrcaResult: "/orcaresult",
-    Orbital: "/orbitalviewer",
+    Orca: "/orca",
   };
 
   return (

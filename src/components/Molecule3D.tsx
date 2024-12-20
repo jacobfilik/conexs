@@ -101,7 +101,7 @@ function Molecule3D(props: Molecule3DProps) {
   return (
     <div
       ref={moleculeViewer}
-      style={{ height: "100%", width: "100%", position: "relative" }}
+      style={{ height: "75%", width: "100%", position: "relative" }}
     />
   );
 }

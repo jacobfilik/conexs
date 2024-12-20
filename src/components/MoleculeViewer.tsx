@@ -56,51 +56,39 @@ function MoleculeViewer() {
   };
 
   return (
-    <>
-      <Stack direction="row" alignItems={"center"} spacing={2}>
-        <Typography variant="h4" sx={{ textAlign: "left" }}>
-          ORCA XAS Input File Generator
-        </Typography>
-      </Stack>
-      <Grid2 container spacing={2}>
-        <Grid2
-          offset={{ md: 1 }}
-          size={5}
-          sx={{ display: "grid", gridAutoRows: "50% 10%", margin: 2, gap: 0 }}
-        >
-          <Molecule3D
-            key={color}
-            color={color}
-            moleculedata={moleculedata}
-            style={style}
-            orbital={null}
-          />
-          <Box sx={{ textAlign: "center" }}>
-            <Tooltip title="Change Background Colour" arrow>
-              <input
-                style={{ margin: "50px" }}
-                type="color"
-                value={color}
-                onChange={(e) => {
-                  setcolor(e.target.value);
-                }}
-              />
-            </Tooltip>
-            <StyleToggle style={style} setStyle={setStyle} />
-          </Box>
-          <Box style={{ position: "relative" }}>
-            <MoleculeDataTextArea
-              moleculedata={moleculedata}
-              setmoleculeData={setmoleculeData}
+    <Grid2 container spacing={5} height="100%">
+      <Grid2 size={4}>
+        <Molecule3D
+          key={color}
+          color={color}
+          moleculedata={moleculedata}
+          style={style}
+          orbital={null}
+        />
+        <Box sx={{ textAlign: "center" }}>
+          <Tooltip title="Change Background Colour" arrow>
+            <input
+              style={{ margin: "50px" }}
+              type="color"
+              value={color}
+              onChange={(e) => {
+                setcolor(e.target.value);
+              }}
             />
-          </Box>
-        </Grid2>
-        <Grid2 size={5}>
-          <FormPage moleculedata={moleculedata} />
+          </Tooltip>
+          <StyleToggle style={style} setStyle={setStyle} />
+        </Box>
+      </Grid2>
+      <Grid2 size={4}>
+        <Stack>
+          <MoleculeDataTextArea
+            moleculedata={moleculedata}
+            setmoleculeData={setmoleculeData}
+          />
           <Divider variant="middle" />
           <Box sx={{ textAlign: "center" }}>
-            <Typography variant="h4" sx={{ my: 5 }}>
-              Molecule Examples
+            <Typography variant="h5" sx={{ my: 1 }}>
+              Examples
             </Typography>
             {exampleMolecules.map((data, index) => {
               return (
@@ -116,9 +104,12 @@ function MoleculeViewer() {
               );
             })}
           </Box>
-        </Grid2>
+        </Stack>
       </Grid2>
-    </>
+      <Grid2 size={4}>
+        <FormPage moleculedata={moleculedata} />
+      </Grid2>
+    </Grid2>
   );
 }
 
