@@ -11,7 +11,7 @@ import {
 } from "@h5web/lib";
 import React, { useState } from "react";
 import VisuallyHiddenInput from "./components/VisuallyHiddenInput";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 
 import { ReactElement } from "react";
 import axios from "axios";
