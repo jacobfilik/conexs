@@ -10,7 +10,8 @@ import {
   getCombinedDomain,
 } from "@h5web/lib";
 import React, { useState } from "react";
-import { Box, Button, Stack, Typography, Grid2 } from "@mui/material";
+import VisuallyHiddenInput from "./components/VisuallyHiddenInput";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 import { ReactElement } from "react";
 import axios from "axios";
@@ -159,26 +160,32 @@ export default function GraphPage() {
   };
 
   return (
-    <Grid2 height="100%" container>
-      <Grid2 item padding={1}>
-        <Stack height="100%">
-          <Typography variant="h5" sx={{ textAlign: "center" }}>
-            Upload `.stk` or `.dat` file to visualize
-          </Typography>
-          <Box sx={{ textAlign: "center" }}>
-            <input type="file" onChange={handleFileUpload} />
-            <input type="file" onChange={handleFileUpload} />
-          </Box>
+    <Stack direction="row" height="100%">
+      <Stack height="100%">
+        <Typography variant="h5" sx={{ textAlign: "center" }}>
+          Upload `.stk` or `.dat` file to visualize
+        </Typography>
+        <Button
+          variant="contained"
+          role={undefined}
+          tabIndex={-1}
+          component="label"
+        >
+          Upload .dat/.stk File
+          <VisuallyHiddenInput
+            type="file"
+            name="file"
+            onChange={handleFileUpload}
+          />
+        </Button>
+        {showExample && (
+          <Button variant="outlined" sx={{ m: 5 }} onClick={fetchExampleData}>
+            Example of Graph
+          </Button>
+        )}
+      </Stack>
 
-          {showExample && (
-            <Button variant="outlined" sx={{ m: 5 }} onClick={fetchExampleData}>
-              Example of Graph
-            </Button>
-          )}
-        </Stack>
-      </Grid2>
-      <Grid2 item height="100%" width="100%" padding={1}>
-        {/* <Paper
+      {/* <Paper
           // flexdirection="column"
           sx={{
             height: "100%",
@@ -189,38 +196,37 @@ export default function GraphPage() {
             fontFamily: (theme: Theme) => theme.typography.fontFamily,
           }}
         > */}
-        <VisCanvas
-          abscissaConfig={{
-            showGrid: true,
-            visDomain: [xdomain[0], xdomain[1]],
-          }}
-          ordinateConfig={{
-            showGrid: true,
-            visDomain: [ydomain[0], ydomain[1]],
-          }}
-        >
-          <DefaultInteractions />
-          <TooltipMesh renderTooltip={tooltipText} />
-          <ResetZoomButton />
-          {xValues != null && yValues != null && (
-            <DataCurve
-              abscissas={xValues}
-              color="green"
-              ordinates={yValues}
-              visible
-            />
-          )}
-          {xValues2 != null && yValues2 != null && (
-            <DataCurve
-              abscissas={xValues2}
-              color="orange"
-              ordinates={yValues2}
-              visible
-            />
-          )}
-        </VisCanvas>
-        {/* </Paper> */}
-      </Grid2>
-    </Grid2>
+      <VisCanvas
+        abscissaConfig={{
+          showGrid: true,
+          visDomain: [xdomain[0], xdomain[1]],
+        }}
+        ordinateConfig={{
+          showGrid: true,
+          visDomain: [ydomain[0], ydomain[1]],
+        }}
+      >
+        <DefaultInteractions />
+        <TooltipMesh renderTooltip={tooltipText} />
+        <ResetZoomButton />
+        {xValues != null && yValues != null && (
+          <DataCurve
+            abscissas={xValues}
+            color="green"
+            ordinates={yValues}
+            visible
+          />
+        )}
+        {xValues2 != null && yValues2 != null && (
+          <DataCurve
+            abscissas={xValues2}
+            color="orange"
+            ordinates={yValues2}
+            visible
+          />
+        )}
+      </VisCanvas>
+      {/* </Paper> */}
+    </Stack>
   );
 }
