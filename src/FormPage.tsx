@@ -225,6 +225,7 @@ function FormPage(props: formProps) {
       formData["Multiplicity Value"] +
       "\n";
     formOutput += props.moleculedata.split("\n").slice(2).join("\n");
+    formOutput += "end";
 
     const blob = new Blob([formOutput], { type: "text/plain" });
     if (downloadLinkRef.current) {

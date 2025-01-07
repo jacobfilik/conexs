@@ -14,14 +14,18 @@ function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
+    //90% height to leave room for tab headers
     <div
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
+      style={{ height: "90%", width: "100%" }}
       {...other}
     >
-      {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
+      {value === index && (
+        <Box sx={{ p: 1, height: "100%", width: "100%" }}>{children}</Box>
+      )}
     </div>
   );
 }

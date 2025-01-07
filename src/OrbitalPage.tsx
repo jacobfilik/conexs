@@ -118,6 +118,20 @@ export default function OrbitalPage() {
             onChange={handleFileUpload}
           />
         </Button>
+        <Form
+          schema={schema}
+          uiSchema={uiSchema}
+          validator={validator}
+          onSubmit={(e) => onSubmit(e.formData)}
+        >
+          <Box textAlign="center">
+            <Button variant="contained" size="medium" type="submit">
+              Update
+            </Button>
+          </Box>
+        </Form>
+      </Stack>
+      <Stack height="100%" width="100%">
         <Box sx={{ textAlign: "center" }}>
           <Tooltip title="Change Background Colour" arrow>
             <input
@@ -131,35 +145,18 @@ export default function OrbitalPage() {
           </Tooltip>
           <StyleToggle style={style} setStyle={setStyle} />
         </Box>
-        <Form
-          schema={schema}
-          uiSchema={uiSchema}
-          validator={validator}
-          onSubmit={(e) => onSubmit(e.formData)}
-        >
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ m: 5, p: 2 }}
-              type="submit"
-            >
-              Update
-            </Button>
-          </Box>
-        </Form>
+        <Molecule3D
+          key={color}
+          color={color}
+          moleculedata={null}
+          orbital={
+            volumeData == null
+              ? null
+              : { cubeData: volumeData, transferfn: volumeParams }
+          }
+          style={style}
+        />
       </Stack>
-      <Molecule3D
-        key={color}
-        color={color}
-        moleculedata={null}
-        orbital={
-          volumeData == null
-            ? null
-            : { cubeData: volumeData, transferfn: volumeParams }
-        }
-        style={style}
-      />
     </Stack>
   );
 }
