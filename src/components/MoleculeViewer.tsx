@@ -33,6 +33,7 @@ function MoleculeViewer() {
     { name: "Pyridine", path: "xyz/pyridine.xyz" },
     { name: "Lattice Example", path: "xyz/lattice.xyz" },
     { name: "Iron Complex", path: "xyz/fecomplex.xyz" },
+    { name: "Fe(bpy)3", path: "xyz/fe(bpy)3.xyz" },
   ];
 
   // const getCube = () => {
