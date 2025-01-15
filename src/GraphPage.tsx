@@ -79,7 +79,7 @@ export default function GraphPage() {
         let setY = setYValues;
         let altXVals = xValues2;
         let altYVals = yValues2;
-        if (file.type == "application/hyperstudio") {
+        if (file.name.endsWith(".stk")) {
           content = stkFilePreprocessing(content);
           setX = setXValues2;
           setY = setYValues2;

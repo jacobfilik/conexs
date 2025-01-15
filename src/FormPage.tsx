@@ -19,7 +19,7 @@ function FormPage(props: formProps) {
       Technique: {
         title: "Technique",
         enum: ["XAS", "XES"],
-        default: "XES",
+        default: "XAS",
       },
       Functional: {
         title: "Functional",
@@ -70,9 +70,15 @@ function FormPage(props: formProps) {
         default: "None",
       },
       CPUs: {
-        title: "CPUs",
+        title: "Number of Cores",
         type: "number",
         default: 4,
+      },
+      MemoryPerCore: {
+        title: "Memory per Core",
+        type: "number",
+        default: 3072,
+        enum: [1024, 2048, 3072, 4096, 6144, 8192, 12288],
       },
     },
     dependencies: {
@@ -145,6 +151,7 @@ function FormPage(props: formProps) {
     "Multiplicity Value": number;
     Solvent: string;
     CPUs: number;
+    MemoryPerCore: number;
     "OrbWin[0] Start": number;
     "OrbWin[0] Stop": number;
     "OrbWin[1] Start": number;
@@ -160,7 +167,7 @@ function FormPage(props: formProps) {
         formOutput += "CPCM(" + formData.Solvent + ") ";
       }
       formOutput += "\n";
-      formOutput += "%maxcore 5024" + "\n\n";
+      formOutput += "%maxcore " + formData.MemoryPerCore + "\n\n";
       formOutput += "%pal nprocs " + formData.CPUs + "\n";
       formOutput += "end" + "\n\n";
       formOutput += "%tddft" + "\n";
@@ -190,7 +197,7 @@ function FormPage(props: formProps) {
       if (formData.Solvent != "None") {
         formOutput += "CPCM(" + formData.Solvent + ") ";
       }
-      formOutput += "%maxcore 5024" + "\n\n";
+      formOutput += "%maxcore " + formData.MemoryPerCore + "\n\n";
       formOutput += "%pal nprocs " + formData.CPUs + "\n";
       formOutput += "end" + "\n\n";
       formOutput += "%xes" + "\n";
@@ -225,7 +232,7 @@ function FormPage(props: formProps) {
       formData["Multiplicity Value"] +
       "\n";
     formOutput += props.moleculedata.split("\n").slice(2).join("\n");
-    formOutput += "end";
+    formOutput += "\nend";
 
     const blob = new Blob([formOutput], { type: "text/plain" });
     if (downloadLinkRef.current) {
