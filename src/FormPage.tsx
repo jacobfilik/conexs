@@ -18,7 +18,7 @@ function FormPage(props: formProps) {
     properties: {
       Technique: {
         title: "Technique",
-        enum: ["XAS", "XES"],
+        enum: ["XAS", "XES", "OPT"],
         default: "XAS",
       },
       Functional: {
@@ -207,6 +207,17 @@ function FormPage(props: formProps) {
       formOutput += "Normalize true" + "\n";
       formOutput += "MDOriginAdjustMethod 1" + "\n";
       formOutput += "end" + "\n\n";
+    } else if (formData.Technique == "OPT") {
+      formOutput +=
+        "! " + formData.Functional + " DKH2 " + formData.Basis + " SARC/J OPT";
+
+      if (formData.Solvent != "None") {
+        formOutput += "CPCM(" + formData.Solvent + ") ";
+      }
+      formOutput += "\n";
+      formOutput += "%maxcore " + formData.MemoryPerCore + "\n\n";
+      formOutput += "%pal nprocs " + formData.CPUs + "\n";
+      formOutput += "end" + "\n\n";
     }
 
     if (formData.Solvent != "None") {
@@ -238,7 +249,7 @@ function FormPage(props: formProps) {
     if (downloadLinkRef.current) {
       const link = downloadLinkRef.current;
       link.href = URL.createObjectURL(blob);
-      link.download = "SimulationOutput.txt";
+      link.download = "JobInput.txt";
       link.click();
     }
   }
